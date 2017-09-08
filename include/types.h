@@ -30,6 +30,10 @@ struct Vec {
 		return data[i];
 	}
 
+    inline const T& operator[](unsigned i) const {
+        return data[i];
+    }
+
 	inline void operator=(T x) {
 		for (auto& it : data)
 			it = x;
@@ -71,75 +75,75 @@ struct Vec {
 	}
 
 	inline TypeName operator+(T x) const {
-		TypeName result(*this);
+        TypeName result{ *this };
 		result += x;
 		return result;
 	}
 
 	inline TypeName operator+(const TypeName& rhs) const {
-		TypeName result(*this);
+		TypeName result{ *this };
 		result += rhs;
 		return result;
 	}
 
 	inline TypeName operator-(T x) const {
-		TypeName result(*this);
+		TypeName result{ *this };
 		result -= x;
 		return result;
 	}
 
 	inline TypeName operator-(const TypeName& rhs) const {
-		TypeName result(*this);
+		TypeName result{ *this };
 		result += rhs;
 		return result;
 	}
 
 	inline TypeName operator*(T x) const {
-		TypeName result(*this);
+		TypeName result{ *this };
 		result *= x;
 		return result;
 	}
+
+    inline TypeName operator/(T x) const {
+        TypeName result{ *this };
+        result /= x;
+        return result;
+    }
 
     /*
     ** dot product and cross product
     */
 	inline T Dot(const TypeName& rhs) const {
-		T result = 0;
+		T result{ 0 };
 		for (int i = 0; i < N; i++)
 			result += data[i] * rhs.data[i];
 		return result;
 	}
 
     inline TypeName Cross(const TypeName& rhs) const {
-        //if (N != 3) {
-        //    cerr << "Cross product only supports vector of size 3" << endl;
-        //    exit(-1);
-        //}
-        return Vec<T, 3>{ data[1] * rhs.data[2] - data[2] * rhs.data[1],
-            data[2] * rhs.data[0] - data[0] * rhs.data[2],
-            data[0] * rhs.data[1] - data[1] * rhs.data[0]};
-    }
-
-    inline TypeName operator/(T x) const {
-        TypeName result(*this);
-        result /= x;
-        return result;
+        if (N != 3) {
+            cerr << "Cross product only supports vector of size 3" << endl;
+            exit(-1);
+        }
+        else {
+            return Vec<T, 3>{ data[1] * rhs.data[2] - data[2] * rhs.data[1],
+                              data[2] * rhs.data[0] - data[0] * rhs.data[2],
+                              data[0] * rhs.data[1] - data[1] * rhs.data[0]};
+        }
     }
 
     /*
     ** length of vector in space
     */
     inline T Len() const {
-        T sum;
+        T sum{ 0 };
         for (const auto& it : data)
             sum += it * it;
         return static_cast<T>(sqrt(static_cast<double>(sum)));
     }
 
     inline void Normalize() {
-        T len{ Len() };
-        for (auto& it : data)
-            it /= len;
+        this->operator/=(Len());
     }
 };
 
@@ -183,11 +187,6 @@ struct Mat {
     }
 
     // operator= and copy constructors
-    Mat<T, N>(const TypeName& rhs) {
-        for (int r = 0; r < N; r++)
-            for (int c = 0; c < N; c++)
-                data[r][c] = rhs.data[r][c];
-    }
     void operator=(const TypeName& rhs) {
         for (int r = 0; r < N; r++)
             for (int c = 0; c < N; c++)
@@ -221,7 +220,7 @@ struct Mat {
                 it += x;
     }
 
-    // operator+ and operator-=
+    // operator- and operator-=
     TypeName operator-(const TypeName& rhs) const {
         TypeName result{ *this };
         result -= rhs;
@@ -245,36 +244,27 @@ struct Mat {
 
     // operator* and operator*=
     TypeName operator*(const TypeName& rhs) const {
-        TypeName result{ *this };
-        result *= rhs;
-        return result;
-    }
-    TypeName operator*(T x) const {
         TypeName result{ 0 };
         for (int r = 0; r < N; r++)
             for (int c = 0; c < N; c++)
                 for (int i = 0; i < N; i++)
                     result[r][c] += data[r][i] * rhs[i][c];
         return result;
-        //TypeName result{ *this };
-        //result *= x;
-        //return result;
+    }
+    TypeName operator*(T x) const {
+        TypeName result{ *this };
+        result *= x;
+        return result;
     }
     Vec<T, N> operator*(const Vec<T, N>& v) const {
         Vec<T, N> result{ 0 };
         for (int r = 0; r < N; r++)
             for (int c = 0; c < N; c++)
-                result[r] += data[r][c] * v[r];
+                result[r] += data[r][c] * v[c];
         return result;
     }
     void operator*=(const TypeName& rhs) {
         *this = (*this) * rhs;
-        //TypeName result{ 0 };
-        //for (int r = 0; r < N; r++)
-        //    for (int c = 0; c < N; c++)
-        //        for (int i = 0; i < N; i++)
-        //            result[r][c] += data[r][i] * rhs[i][c];
-        //return result;
     }
     void operator*=(T x) {
         for (auto& it_row : data)
@@ -345,7 +335,7 @@ struct Mat {
             }
         }
         for (int r = N - 1; r > 0; r--)
-            for (r1 = r - 1; r >= 0; r1--) {
+            for (int r1 = r - 1; r >= 0; r1--) {
                 T tmp{ -m.data[r1][r] / m.data[r][r] };
                 //m.Replace(r1, r, tmp);
                 result.Replace(r1, r, tmp);
@@ -365,7 +355,7 @@ struct Mat {
 	}
 	static TypeName UnitMat() {
         TypeName result{ 0 };
-        for (int r = 0; i < N; i++)
+        for (int r = 0; r < N; r++)
             result[r][r] = 1;
         return result;
 	}
