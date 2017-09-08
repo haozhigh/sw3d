@@ -1,36 +1,53 @@
 \documentclass[12pt]{article}
 
+\usepackage[charter]{mathdesign}
 \usepackage[bookmarks,bookmarksopen]{hyperref}
 
 \begin{document}
-\sffamily
 \section{Fixed Functions in Graphic Pipeline}
     \subsection{Rasterization}
-    Addition Fomulars:
-    \[ \begin{array}{c}
-        \cos{ \left( x+y \right) }=\cos{x}\cos{y}-\sin{x}\sin{y} \\
-        \sin{ \left( x+y \right) }=\sin{x}\cos{y}+\cos{x}\sin{y}
-    \end{array} \]
-    2D rotate matrix:
-    \[ \left[ \begin{array}{rr}
-        \cos{\alpha} & -\sin{\alpha} \\
-        \sin{\alpha} & \cos{\alpha}
-    \end{array} \right] \]
-    2D matrix to rotate a vector 90 degress counter-clockwise:
-    \[ \left[ \begin{array}{rr}
-        0 & 0\\
-        -1 & 0
-    \end{array} \right] \]
-    To judge vector v1 is pointing to the right side of vector v0:
-    \[
-    \left(
-        \left[ \begin{array}{rr} 0 & 0\\ -1 & 0 \end{array} \right]
-        \overrightarrow{v_0}
-    \right)
-    \cdot \overrightarrow{v_1} > 0
-    \]
-    In OpenGL, default visiable triangles are counter-clockwise, thus left side of 
-    three edges form the triangle aera.
+        Addition Fomulars:
+        \[ \begin{array}{c}
+            \cos{ \left( x+y \right) }=\cos{x}\cos{y}-\sin{x}\sin{y} \\
+            \sin{ \left( x+y \right) }=\sin{x}\cos{y}+\cos{x}\sin{y}
+        \end{array} \]
+        2D rotate matrix:
+        \[ \left[ \begin{array}{rr}
+            \cos{\alpha} & -\sin{\alpha} \\
+            \sin{\alpha} & \cos{\alpha}
+        \end{array} \right] \]
+        2D matrix to rotate a vector 90 degress counter-clockwise:
+        \[ \left[ \begin{array}{rr}
+            0 & 0\\
+            -1 & 0
+        \end{array} \right] \]
+        To judge vector v1 is pointing to the right side of vector v0:
+        \[
+        \left(
+            \left[ \begin{array}{rr} 0 & 0\\ -1 & 0 \end{array} \right]
+            \overrightarrow{v_0}
+        \right)
+        \cdot \overrightarrow{v_1} > 0
+        \]
+        In OpenGL, default visiable triangles are counter-clockwise, thus left side of 
+        three edges form the triangle aera.
+    \subsection{Coordinate System Transform}
+        Describe (u,v,w) space axis in (x,y,z) space:
+        \[
+            \left[ \begin{array}{ccc} \overrightarrow{u} & \overrightarrow{v} & \overrightarrow{w} \end{array} \right]
+            =
+            \left[ \begin{array}{ccc} \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z} \end{array} \right]
+            \times
+            \left[ \begin{array}{ccc}
+                x_u & x_v & x_w \\
+                y_u & y_v & y_w \\
+                z_u & z_v & z_w
+            \end{array} \right]
+            =
+            \left[ \begin{array}{ccc} \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z} \end{array} \right]
+            \times
+            \textbf{P}
+        \]
 \section{Linear Algebra}
     \subsection{Cross Product}
     Cross product definition differs in right-hand coordinate system and left-hand
