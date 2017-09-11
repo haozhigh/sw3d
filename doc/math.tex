@@ -2,6 +2,7 @@
 
 \usepackage[charter]{mathdesign}
 \usepackage[bookmarks,bookmarksopen]{hyperref}
+\usepackage{bm}
 
 \begin{document}
 \section{Fixed Functions in Graphic Pipeline}
@@ -33,20 +34,73 @@
         three edges form the triangle aera.
     \subsection{Coordinate System Transform}
         Describe (u,v,w) space axis in (x,y,z) space:
-        \[
-            \left[ \begin{array}{ccc} \overrightarrow{u} & \overrightarrow{v} & \overrightarrow{w} \end{array} \right]
-            =
+        \begin{eqnarray*}
+            \left[ \begin{array}{ccc} \overrightarrow{u} & \overrightarrow{v} & \overrightarrow{w} \end{array} \right] &
+            = &
             \left[ \begin{array}{ccc} \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z} \end{array} \right]
             \times
             \left[ \begin{array}{ccc}
                 x_u & x_v & x_w \\
                 y_u & y_v & y_w \\
                 z_u & z_v & z_w
-            \end{array} \right]
-            =
+            \end{array} \right] \\
+            & = &
             \left[ \begin{array}{ccc} \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z} \end{array} \right]
             \times
             \textbf{P}
+        \end{eqnarray*}
+        \textbf{P} converts a vector from (u,v,w) space to (x,y,z) space; Inv(\textbf{P})
+        converts a vector from (x,y,z) space to (u,v,w) space:
+        \begin{eqnarray*}
+            \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right] &
+            = &
+            \left[ \begin{array}{ccc}
+                \overrightarrow{u} & \overrightarrow{v} & \overrightarrow{w}
+            \end{array} \right]
+            \times
+            \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right] \\
+            & = &
+            \left[ \begin{array}{ccc}
+            \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z}
+            \end{array} \right]
+            \times
+            \textbf{P}
+            \times
+            \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right] \\
+            & = &
+            \left[ \begin{array}{ccc}
+            \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z}
+            \end{array} \right]
+            \times
+            \left(
+                \textbf{P}
+                \times
+                \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right]
+            \right)
+        \end{eqnarray*}
+        For points transformation:
+        \[
+            \left[ \begin{array}{cc}
+                \textbf{P} & \begin{array}{c} u_{root} \\ v_{root} \\ w_{root} \end{array} \\
+                \begin{array}{ccc} 0 & 0 & 0 \end{array} & 1
+            \end{array} \right]
+            \times
+            \left[ \begin{array}{cc}
+                \bm{P^{-1}} &
+                -\bm{P^{-1}} \times
+                \left[ \begin{array}{c}
+                    u_{root} \\ v_{root} \\ w_{root}
+                \end{array} \right] \\
+                \begin{array}{ccc} 0 & 0 & 0 \end{array} &
+                1
+            \end{array} \right]
+            =
+            \left[ \begin{array}{cccc}
+                1 & 0 & 0 & 0 \\
+                0 & 1 & 0 & 0 \\
+                0 & 0 & 1 & 0 \\
+                0 & 0 & 0 & 1
+            \end{array} \right]
         \]
 \section{Linear Algebra}
     \subsection{Cross Product}
@@ -58,27 +112,27 @@
         \overrightarrow{z} \times \overrightarrow{x} = \overrightarrow{y}
     \end{array} \]
     From this, it can be inferred that:
-    \[
+    \begin{eqnarray*}
         \left[ \begin{array}{c}
             a_1 \\ a_2 \\ a_3
         \end{array} \right]
         \times
         \left[ \begin{array}{c}
             b_1 \\ b_2 \\ b_3
-        \end{array} \right]
-        =
+        \end{array} \right] &
+        = &
         \left(
             a_1\overrightarrow{x} + a_2\overrightarrow{y} + a_3\overrightarrow{z}
         \right)
         \times
         \left(
             a_1\overrightarrow{x} + a_2\overrightarrow{y} + a_3\overrightarrow{z}
-        \right)
-        =
+        \right) \\
+        & = &
         \left| \begin{array}{ccc}
             \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z} \\
             a_1 & a_2 & a_3 \\
             b_1 & b_2 & b_3
         \end{array} \right|
-    \]
+    \end{eqnarray*}
 \end{document}
