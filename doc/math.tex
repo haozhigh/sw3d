@@ -102,6 +102,110 @@
                 0 & 0 & 0 & 1
             \end{array} \right]
         \]
+    \subsection{Tangent Space}
+        Triangle ABC in (x,y,z) space and (t,b,n) space:
+        \[
+            \left[ \begin{array}{ccc}
+            x_a & x_b & x_c \\
+            y_a & y_b & y_c \\
+            z_a & z_b & z_c
+            \end{array} \right]
+            \left[ \begin{array}{ccc}
+            u_a & u_b & u_c \\
+            v_a & v_b & v_c \\
+            0   & 0   & 0
+            \end{array} \right]
+        \]
+        For 2 edges of the triangle:
+        \begin{eqnarray*}
+            \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+            \times
+            \left[ \begin{array}{cc}
+                E1_x & E2_x \\
+                E1_y & E2_y \\
+                E1_z & E2_z
+            \end{array} \right]
+            & = &
+            \left[ \overrightarrow{t}, \overrightarrow{b}, \overrightarrow{n} \right]       
+            \times
+            \left[ \begin{array}{cc}
+                E1_u & E2_u \\
+                E1_v & E2_v \\
+                0    & 0
+            \end{array} \right] \\
+            & = &
+            \left[ \overrightarrow{t}, \overrightarrow{b} \right]       
+            \times
+            \left[ \begin{array}{cc}
+                E1_u & E2_u \\
+                E1_v & E2_v
+            \end{array} \right]
+        \end{eqnarray*}
+        Then:
+        \begin{eqnarray*}
+            \left[ \overrightarrow{t}, \overrightarrow{b} \right]       
+            & = &
+            \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+            \times
+            \left[ \begin{array}{cc}
+                E1_x & E2_x \\
+                E1_y & E2_y \\
+                E1_z & E2_z
+            \end{array} \right]
+            \times
+            \left[ \begin{array}{cc}
+                E1_u & E2_u \\
+                E1_v & E2_v
+            \end{array} \right]^{-1} \\
+            & = &
+            \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+            \times
+            \left(
+                \left[ \begin{array}{cc}
+                    E1_x & E2_x \\
+                    E1_y & E2_y \\
+                    E1_z & E2_z
+                \end{array} \right]
+                \times
+                \left[ \begin{array}{cc}
+                    E1_u & E2_u \\
+                    E1_v & E2_v
+                \end{array} \right]^{-1}
+            \right) \\
+            & = &
+            \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+            \times
+            \left(
+                \left[ \begin{array}{cc}
+                    E1_x & E2_x \\
+                    E1_y & E2_y \\
+                    E1_z & E2_z
+                \end{array} \right]
+                \times
+                \frac{1}{E1_uE2_v-E1_vE2_u}
+                \left[ \begin{array}{cc}
+                     E2_v & -E2_u \\
+                    -E1_v &  E1_u
+                \end{array} \right]^{-1}
+            \right) \\
+            & = &
+            \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+            \times
+            \left(
+                \frac{1}{E1_uE2_v-E1_vE2_u}
+                \left[ \begin{array}{cc}
+                    E1_x & E2_x \\
+                    E1_y & E2_y \\
+                    E1_z & E2_z
+                \end{array} \right]
+                \times
+                \left[ \begin{array}{cc}
+                     E2_v & -E2_u \\
+                    -E1_v &  E1_u
+                \end{array} \right]^{-1}
+            \right)
+        \end{eqnarray*}
+    
 \section{Linear Algebra}
     \subsection{Cross Product}
     Cross product definition differs in right-hand coordinate system and left-hand
