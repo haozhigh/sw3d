@@ -3,6 +3,7 @@
 \usepackage[charter]{mathdesign}
 \usepackage[bookmarks,bookmarksopen]{hyperref}
 \usepackage{bm}
+\usepackage{graphicx}
 
 \begin{document}
 \section{Fixed Functions in Graphic Pipeline}
@@ -205,6 +206,65 @@
                 \end{array} \right]^{-1}
             \right)
         \end{eqnarray*}
+
+    \subsection{Perspective Projection}
+    In perspective projection, r,n,f\(\left[\alpha,\beta\right]\) defines a frustum:
+    \begin{itemize}
+        \item f: z of far plane
+        \item n: z of near plane
+        \item r: ratio of width to height of view wnidow
+        \item d: z of view window
+        \item \(\alpha\) : view angle in the y axis direction
+        \item \(\beta\) : view angle in the x axis direction
+    \end{itemize}
+    In the y axis direction:
+    \begin{center}
+        \includegraphics[height=25em]{geogebra/project_y.png}
+    \end{center}
+    \[
+        y'=y\frac{d}{z}=\frac{y}{z\tan{\frac{\alpha}{2}}}
+    \]
+    And in the x axis direction:
+    \begin{center}
+        \includegraphics[height=25em]{geogebra/project_x.png}
+    \end{center}
+    \[
+        x'=x\frac{d}{z}=\frac{x}{z\bullet r\tan{\frac{\alpha}{2}}}
+    \]
+    Put everything together:
+    \[
+        \left[ \begin{array}{cccc}
+            \frac{1}{r\tan{\frac{\alpha}{2}}} & & & \\
+            & \frac{1}{\tan{\frac{\alpha}{2}}} & & \\
+            & & A & B \\
+            & & 1 & 0
+        \end{array} \right]
+        \left[ \begin{array}{c}
+            x \\
+            y \\
+            z \\
+            1
+        \end{array} \right]
+        =
+        \left[ \begin{array}{c}
+            \frac{x}{r\tan{\frac{\alpha}{2}}} \\
+            \frac{y}{\tan{\frac{\alpha}{2}}} \\
+            A\bullet z+B \\
+            z
+        \end{array} \right]
+        \to
+        \left[ \begin{array}{c}
+            \frac{x}{r\bullet z\tan{\frac{\alpha}{2}}} \\
+            \frac{y}{z\tan{\frac{\alpha}{2}}} \\
+            A+\frac{B}{z} \\
+            1
+        \end{array} \right]
+    \]
+    To make \(A+\frac{B}{z}\) 0 at near plane and -1 at far plane:
+    \begin{itemize}
+        \item \(A=\frac{-f}{f-n}\)
+        \item \(B=\frac{nf}{f-n}\)
+    \end{itemize}
     
 \section{Linear Algebra}
     \subsection{Cross Product}
