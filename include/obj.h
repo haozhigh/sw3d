@@ -39,19 +39,19 @@ struct Obj {
                 float y{ stof(spans[2], nullptr) };
                 float z{ stof(spans[3], nullptr) };
                 float w{ spans.size() > 4 ? stof(spans[4], nullptr) : 1.0f };
-                v.emplace_back(x, y, z, w);
+				v.emplace_back(vec4{ x, y, z, w });
             }
             else if (StartsWith(line, "vn ")) {
                 float i{ stof(spans[1], nullptr) };
                 float j{ stof(spans[2], nullptr) };
                 float k{ stof(spans[3], nullptr) };
-                vn.emplace_back(i, j, k);
+				vn.emplace_back(vec3{ i, j, k });
             }
             else if (StartsWith(line, "vt ")) {
                 float u{ stof(spans[1], nullptr) };
                 float v{ stof(spans[2], nullptr) };
                 float w{ spans.size() > 3 ? stof(spans[3], nullptr) : 0.0f };
-                vt.emplace_back(u, v, w);
+				vt.emplace_back(vec3{ u, v, w });
             }
             else if (StartsWith(line, "f ")) {
                 vector<uivec3> face;
@@ -65,7 +65,7 @@ struct Obj {
                     unsigned v_id = stoi(spans_inner[0], nullptr, 10);
                     unsigned vt_id = spans_inner[1].size() > 0 ? stoi(spans_inner[1], nullptr, 10) : 0;
                     unsigned vn_id = spans_inner[2].size() > 0 ? stoi(spans_inner[2], nullptr, 10) : 0;
-                    face.emplace_back(v_id, vt_id, vn_id);
+					face.emplace_back(uivec3{ v_id, vt_id, vn_id });
                 }
                 f.push_back(move(face));
             }

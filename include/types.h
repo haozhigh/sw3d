@@ -5,6 +5,10 @@
 #include <initializer_list>
 using namespace std;
 
+using uint = unsigned int;
+using ulong = unsigned long long;
+using uchar = unsigned char;
+
 template <typename T, unsigned N>
 struct Vec {
 	T data[N];
@@ -15,10 +19,12 @@ struct Vec {
     Vec<T, N>() {};
 	Vec<T, N>(initializer_list<T> values) {
         if (values.size() == 1)
-            *this = values[0];
-        else
+            *this = *(values.begin());
+		else {
+			const T* p{ values.begin() };
             for (int i = 0; i < N; i++)
-                data[i] = values[i];
+                data[i] = *p++;
+		}
     }
 	// copy constructor
 	Vec<T, N>(const TypeName& v) {
@@ -168,23 +174,36 @@ struct Mat {
     Mat<T, N>() { };
     Mat<T, N>(initializer_list<T> values) {
         if (values.size() == 1)
-            (*this) = values[0];
-        else
+            (*this) = *(values.begin());
+		else {
+			const T* p{ values.begin() };
             for (unsigned r = 0; r < N; r++)
-                for (unsigned c = 0; c < N; c++)
-                    data[r][c] = values[r * N + c];
+				for (unsigned c = 0; c < N; c++)
+					data[r][c] = *p++;
+		}
 
     }
     Mat<T, N>(initializer_list<Vec<T, N>> vecs) {
-        for (unsigned r = 0; r < N; r++)
-            for (unsigned c = 0; c < N; c++)
-                data[r][c] = vecs[c][r];
-    }
-    Mat<T, N>(const Mat<T, N>& rhs) {
+		const auto* p{ vecs.begin() };
+		for (unsigned c = 0; c < N; c++) {
+			for (unsigned r = 0; r < N; r++)
+				data[r][c] = (*p)[r];
+			p++;
+		}
+	}
+	Mat<T, N>(const Mat<T, N>& rhs) {
         for (unsigned r = 0; r < N; r++)
             for (unsigned c = 0; c < N; c++)
                 data[r][c] = rhs.data[r][c];
     }
+
+	auto& operator[](unsigned n) {
+		return data[n];
+	}
+
+	const auto& operator[](unsigned n) const{
+		return data[n];
+	}
 
     // operator= and copy constructors
     void operator=(const TypeName& rhs) {

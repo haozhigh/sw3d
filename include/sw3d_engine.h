@@ -8,17 +8,46 @@ using namespace std;
 #include "obj.h"
 
 class Sw3dEngine {
-private:
-    mat4 m_view;
-    mat4 m_project;
-    mat4 m_screen;
-
-
 
 public:
     Sw3dEngine() {
 
     }
+
+	void SetBuffer(uchar* buffer, int width, int height) {
+		m_buffer = buffer;
+		m_width = width;
+		m_height = height;
+	}
+
+	void DrawCircle() {
+		int half_width{ m_width / 2 };
+		int half_height{ m_height / 2 };
+		int r_max{ (m_height / 4 * 3) * (m_height / 4 * 3) };
+		int r_min{ (m_height / 2) * (m_height / 2) };
+
+		for (int y = 0; y < m_height; y++)
+			for (int x = 0; x < m_width; x++) {
+				int rr{ (y - half_height) * (y - half_height) +
+				(x - half_width) * (x - half_width) };
+				//m_buffer[Offset(x, y, 0)] = 128;
+				//m_buffer[Offset(x, y, 1)] = 128;
+				//m_buffer[Offset(x, y, 2)] = 128;
+				//m_buffer[Offset(x, y, 3)] = 128;
+				if (rr >= r_min && rr <= r_max) {
+					m_buffer[Offset(x, y, 0)] = 0;
+					m_buffer[Offset(x, y, 1)] = 0;
+					m_buffer[Offset(x, y, 2)] = 0;
+					m_buffer[Offset(x, y, 3)] = 255;
+				}
+				else {
+					m_buffer[Offset(x, y, 0)] = 128;
+					m_buffer[Offset(x, y, 1)] = 128;
+					m_buffer[Offset(x, y, 2)] = 128;
+					m_buffer[Offset(x, y, 3)] = 255;
+				}
+			}
+	}
 
     void LookAt(vec3 eye, vec3 center, vec3 up) {
         vec3 z{ eye - center };
@@ -51,5 +80,19 @@ public:
             obj.vv.push_back(model2screen * vertex);
         }
     }
+private:
+	int Offset(int x, int y, int c) const {
+		return y * m_width * 4 + x * 4 + c;
+	}
+
+private:
+    mat4 m_view;
+    mat4 m_project;
+    mat4 m_screen;
+
+
+	int m_width;
+	int m_height;
+	uchar* m_buffer;
 
 };
