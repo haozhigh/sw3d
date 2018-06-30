@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}
+
+\usepackage[charter]{mathdesign}
+\usepackage{bm}
+\pagestyle{empty}
+
+\begin{document}
+    \begin{eqnarray*}
+        \left[ \overrightarrow{t}, \overrightarrow{b} \right]       
+        & = &
+        \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+        \times
+        \left[ \begin{array}{cc}
+            E1_x & E2_x \\
+            E1_y & E2_y \\
+            E1_z & E2_z
+        \end{array} \right]
+        \times
+        \left[ \begin{array}{cc}
+            E1_u & E2_u \\
+            E1_v & E2_v
+        \end{array} \right]^{-1} \\
+        & = &
+        \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+        \times
+        \left(
+            \left[ \begin{array}{cc}
+                E1_x & E2_x \\
+                E1_y & E2_y \\
+                E1_z & E2_z
+            \end{array} \right]
+            \times
+            \left[ \begin{array}{cc}
+                E1_u & E2_u \\
+                E1_v & E2_v
+            \end{array} \right]^{-1}
+        \right) \\
+        & = &
+        \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+        \times
+        \left(
+            \left[ \begin{array}{cc}
+                E1_x & E2_x \\
+                E1_y & E2_y \\
+                E1_z & E2_z
+            \end{array} \right]
+            \times
+            \frac{1}{E1_uE2_v-E1_vE2_u}
+            \left[ \begin{array}{cc}
+                 E2_v & -E2_u \\
+                -E1_v &  E1_u
+            \end{array} \right]^{-1}
+        \right) \\
+        & = &
+        \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+        \times
+        \left(
+            \frac{1}{E1_uE2_v-E1_vE2_u}
+            \left[ \begin{array}{cc}
+                E1_x & E2_x \\
+                E1_y & E2_y \\
+                E1_z & E2_z
+            \end{array} \right]
+            \times
+            \left[ \begin{array}{cc}
+                 E2_v & -E2_u \\
+                -E1_v &  E1_u
+            \end{array} \right]^{-1}
+        \right)
+    \end{eqnarray*}
+\end{document}

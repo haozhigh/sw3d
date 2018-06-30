@@ -1,0 +1,31 @@
+\documentclass[12pt]{article}
+
+\usepackage[charter]{mathdesign}
+\usepackage{bm}
+\pagestyle{empty}
+
+\begin{document}
+    \begin{eqnarray*}
+        \left[ \begin{array}{c}
+            a_1 \\ a_2 \\ a_3
+        \end{array} \right]
+        \times
+        \left[ \begin{array}{c}
+            b_1 \\ b_2 \\ b_3
+        \end{array} \right] &
+        = &
+        \left(
+            a_1\overrightarrow{x} + a_2\overrightarrow{y} + a_3\overrightarrow{z}
+        \right)
+        \times
+        \left(
+            a_1\overrightarrow{x} + a_2\overrightarrow{y} + a_3\overrightarrow{z}
+        \right) \\
+        & = &
+        \left| \begin{array}{ccc}
+            \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z} \\
+            a_1 & a_2 & a_3 \\
+            b_1 & b_2 & b_3
+        \end{array} \right|
+    \end{eqnarray*}
+\end{document}

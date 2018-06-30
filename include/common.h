@@ -14,6 +14,13 @@ void ExitAsssert(bool b, const string& s, int e = -1) {
     }
 }
 
+void ExitAsssert(bool b, const wstring& s, int e = -1) {
+    if (! b) {
+        wcout << s << endl;
+        exit(e);
+    }
+}
+
 bool StartsWith(const string& s, const string& sub) {
     for (unsigned i = 0; i < sub.size(); i++)
         if (s[i] != sub[i])

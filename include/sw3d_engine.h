@@ -2,17 +2,18 @@
 
 
 #include <vector>
+#include <cmath>
 using namespace std;
 
 #include "types.h"
 #include "obj.h"
 
+#define M_PI 3.14159265358979323846f
+
 class Sw3dEngine {
 
 public:
-    Sw3dEngine() {
-
-    }
+	Sw3dEngine(float alpha, float r) : m_alpha(alpha), m_r(r) { }
 
 	void SetBuffer(uchar* buffer, int width, int height) {
 		m_buffer = buffer;
@@ -74,21 +75,56 @@ public:
 		//LineAA(0.0f, 0.0f, 6.0f, 2.0f);
 	}
 
-    void LookAt(vec3 eye, vec3 center, vec3 up) {
-        vec3 z{ eye - center };
-        vec3 x{ up.Cross(z) };
-        vec3 y{ z.Cross(x) };
-        x.Normalize();
-        y.Normalize();
-        z.Normalize();
-        mat3 P{ x, y, z };
-        mat3 P_inv{ P.Inv() };
-        vec3 eye_transformed{ P_inv * eye };
-        m_view = mat4{ P_inv.data[0][0], P_inv.data[0][1], P_inv.data[0][2], -eye_transformed[0],
-                       P_inv.data[1][0], P_inv.data[1][1], P_inv.data[1][2], -eye_transformed[1],
-                       P_inv.data[2][0], P_inv.data[2][1], P_inv.data[2][2], -eye_transformed[2],
-                       0,                0,                0,                1 };
-    }
+	void ResetView(Obj& obj) {
+		m_theta = M_PI / 2;
+		m_phi = 0.0f;
+		m_radius = sqrt(pow(obj.xmax - obj.xmin, 2.0f) +
+			pow(obj.ymax - obj.ymin, 2.0f) + 
+			pow(obj.zmax - obj.zmin, 2.0f));
+		m_radius_min = m_radius / 2.0f * 1.01f;
+
+		UpdateView();
+	}
+
+	void ZoomIn() {
+		m_radius /= 1.2f;
+		if (m_radius >= m_radius_min)
+			m_radius = m_radius_min;
+		UpdateView();
+	}
+
+	void ZoomOut() {
+		m_radius *= 1.2f;
+		UpdateView();
+	}
+
+	void RotateLeft() {
+		m_phi -= M_PI / 4.0f;
+		if (m_phi < 0.0f)
+			m_phi += M_PI * 2.0f;
+		UpdateView();
+	}
+
+	void RotateRight() {
+		m_phi += M_PI / 4.0f;
+		if (m_phi > M_PI * 2.0f)
+			m_phi -= M_PI * 2.0f;
+		UpdateView();
+	}
+
+	void RotateUp() {
+		m_theta -= M_PI / 8.0f;
+		if (m_theta < 0.0f)
+			m_theta = 0.0f;
+		UpdateView();
+	}
+
+	void RotateDown() {
+		m_theta += M_PI / 8.0f;
+		if (m_theta > M_PI)
+			m_theta = M_PI;
+		UpdateView();
+	}
 
     void DrawObj(Obj& obj) {
         mat4 model2world { obj.axis_u[0], obj.axis_v[0], obj.axis_w[0], obj.origin[0],
@@ -111,6 +147,35 @@ private:
 		return y * m_width * 4 + x * 4 + c;
 	}
 
+	void UpdateView() {
+		vec3 eye;
+		vec3 up;
+
+		eye[0] = m_radius * sin(m_theta) * cos(m_phi);
+		eye[1] = m_radius * sin(m_theta) * sin(m_phi);
+		eye[2] = m_radius * cos(m_theta);
+		up = eye.Cross(vec3({ 0.0f, 0.0f, 1.0f })).Cross(eye);
+
+		LookAt(eye, vec3({ 0.0f, 0.0f, 0.0f }), up);
+	}
+
+	// set world space to view space transform matrix
+    void LookAt(vec3 eye, vec3 center, vec3 up) {
+        vec3 z{ eye - center };
+        vec3 x{ up.Cross(z) };
+        vec3 y{ z.Cross(x) };
+        x.Normalize();
+        y.Normalize();
+        z.Normalize();
+        mat3 P{ x, y, z };
+        mat3 P_inv{ P.Inv() };
+        vec3 eye_transformed{ P_inv * eye };
+        m_view = mat4{ P_inv.data[0][0], P_inv.data[0][1], P_inv.data[0][2], -eye_transformed[0],
+                       P_inv.data[1][0], P_inv.data[1][1], P_inv.data[1][2], -eye_transformed[1],
+                       P_inv.data[2][0], P_inv.data[2][1], P_inv.data[2][2], -eye_transformed[2],
+                       0,                0,                0,                1 };
+    }
+
 	/*
 	** Xiaolin Wu's line algorithm
 	*/
@@ -120,6 +185,8 @@ private:
 			int iy{ static_cast<int>(y) };
 			uchar ic{ static_cast<uchar>(round((1 - c) * 255)) };
 			if (ix >= m_width || iy >= m_height)
+				return;
+			if (ix < 0 || iy < 0)
 				return;
 			m_buffer[Offset(ix, iy, 0)] = ic;
 			m_buffer[Offset(ix, iy, 1)] = ic;
@@ -204,9 +271,18 @@ private:
     mat4 m_project;
     mat4 m_screen;
 
-
+	// dimension of output framebuffer
 	int m_width;
 	int m_height;
 	uchar* m_buffer;
 
+	// eye locaton in spherical coordinate system
+	float m_radius;
+	float m_theta;
+	float m_phi;
+	float m_radius_min;
+
+	// frustum charactistics
+	const float m_r;		// ratio of frustum width to height
+	const float m_alpha;	// vertical view angle of frustum
 };

@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+
+\usepackage[charter]{mathdesign}
+\usepackage{bm}
+\pagestyle{empty}
+
+\begin{document}
+    \begin{eqnarray*}
+        \left[ \overrightarrow{x}, \overrightarrow{y}, \overrightarrow{z} \right]       
+        \times
+        \left[ \begin{array}{cc}
+            E1_x & E2_x \\
+            E1_y & E2_y \\
+            E1_z & E2_z
+        \end{array} \right]
+        & = &
+        \left[ \overrightarrow{t}, \overrightarrow{b}, \overrightarrow{n} \right]       
+        \times
+        \left[ \begin{array}{cc}
+            E1_u & E2_u \\
+            E1_v & E2_v \\
+            0    & 0
+        \end{array} \right] \\
+        & = &
+        \left[ \overrightarrow{t}, \overrightarrow{b} \right]       
+        \times
+        \left[ \begin{array}{cc}
+            E1_u & E2_u \\
+            E1_v & E2_v
+        \end{array} \right]
+    \end{eqnarray*}
+\end{document}

@@ -1,0 +1,36 @@
+\documentclass[12pt]{article}
+
+\usepackage[charter]{mathdesign}
+\usepackage{bm}
+\pagestyle{empty}
+
+\begin{document}
+    \[
+        \left[ \begin{array}{cccc}
+            \frac{1}{r\tan{\frac{\alpha}{2}}} & & & \\
+            & \frac{1}{\tan{\frac{\alpha}{2}}} & & \\
+            & & A & B \\
+            & & 1 & 0
+        \end{array} \right]
+        \left[ \begin{array}{c}
+            x \\
+            y \\
+            z \\
+            1
+        \end{array} \right]
+        =
+        \left[ \begin{array}{c}
+            \frac{x}{r\tan{\frac{\alpha}{2}}} \\
+            \frac{y}{\tan{\frac{\alpha}{2}}} \\
+            A\bullet z+B \\
+            z
+        \end{array} \right]
+        \to
+        \left[ \begin{array}{c}
+            \frac{x}{r\bullet z\tan{\frac{\alpha}{2}}} \\
+            \frac{y}{z\tan{\frac{\alpha}{2}}} \\
+            A+\frac{B}{z} \\
+            1
+        \end{array} \right]
+    \]
+\end{document}

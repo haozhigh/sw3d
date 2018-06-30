@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <limits>
 using namespace std;
 
 #include "common.h"
@@ -21,11 +22,26 @@ struct Obj {
     vec3 axis_u;        // axis u of this object described in world axis x,y,z
     vec3 axis_v;        // axis v of this object described in world axis x,y,z
     vec3 axis_w;        // axis w of this object described in world axis x,y,z
+
+	// bounding box of all vertices
+	float xmin;
+	float xmax;
+	float ymin;
+	float ymax;
+	float zmin;
+	float zmax;
     
 
-    Obj(string obj_filepath) {
-        ifstream ifile(obj_filepath);
-        ExitAsssert(ifile.is_open(), "Failed to open obj file: " + obj_filepath);
+	Obj(wstring obj_filepath):
+		xmin(FLT_MAX),
+		xmax(-FLT_MAX),
+		ymin(FLT_MAX),
+		ymax(-FLT_MAX),
+		zmin(FLT_MAX),
+		zmax(-FLT_MAX)
+	{
+        ifstream ifile(obj_filepath.c_str());
+        ExitAsssert(ifile.is_open(), wstring(L"Failed to open obj file: ") + obj_filepath);
 
         string line;
         while (ifile.good()) {
@@ -40,6 +56,14 @@ struct Obj {
                 float z{ stof(spans[3], nullptr) };
                 float w{ spans.size() > 4 ? stof(spans[4], nullptr) : 1.0f };
 				v.emplace_back(vec4{ x, y, z, w });
+
+				// update bounding box
+				xmin = min(xmin, x);
+				xmax = max(xmax, x);
+				ymin = min(ymin, y);
+				ymax = max(ymax, y);
+				zmin = min(zmin, z);
+				zmax = max(zmax, z);
             }
             else if (StartsWith(line, "vn ")) {
                 float i{ stof(spans[1], nullptr) };
@@ -72,13 +96,40 @@ struct Obj {
         }
         ifile.close();
 
+		// move object's center of bounding box to (0, 0, 0)
+		// if v has w value in .obj file, below codes are not right
+		float xmid = (xmin + xmax) / 2;
+		float ymid = (ymin + ymax) / 2;
+		float zmid = (zmin + zmax) / 2;
+		for (auto& p : v) {
+			p[0] -= xmid;
+			p[1] -= ymid;
+			p[2] -= zmid;
+		}
+
         MakeFaceCounterClockWise();
     }
 
     /*
     ** copy constructor
     */
-    Obj(const Obj& rhs): v(rhs.v), vt(rhs.vt), vn(rhs.vn), f(rhs.f) {
+    Obj(const Obj& rhs):
+		v(rhs.v),
+		vv(rhs.vv),
+		vt(rhs.vt),
+		vn(rhs.vn),
+		f(rhs.f),
+		origin(rhs.origin),
+		axis_u(rhs.axis_u),
+		axis_v(rhs.axis_v),
+		axis_w(rhs.axis_w),
+		xmin(rhs.xmin),
+		xmax(rhs.xmax),
+		ymin(rhs.ymin),
+		ymax(rhs.ymax),
+		zmin(rhs.zmin),
+		zmax(rhs.zmax)
+	{
     }
 
     /*

@@ -1,0 +1,31 @@
+\documentclass[12pt]{article}
+
+\usepackage[charter]{mathdesign}
+\usepackage{bm}
+\pagestyle{empty}
+
+\begin{document}
+    \[
+        \left[ \begin{array}{cc}
+            \textbf{P} & \begin{array}{c} u_{root} \\ v_{root} \\ w_{root} \end{array} \\
+            \begin{array}{ccc} 0 & 0 & 0 \end{array} & 1
+        \end{array} \right]
+        \times
+        \left[ \begin{array}{cc}
+            \bm{P^{-1}} &
+            -\bm{P^{-1}} \times
+            \left[ \begin{array}{c}
+                u_{root} \\ v_{root} \\ w_{root}
+            \end{array} \right] \\
+            \begin{array}{ccc} 0 & 0 & 0 \end{array} &
+            1
+        \end{array} \right]
+        =
+        \left[ \begin{array}{cccc}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+        \end{array} \right]
+    \]
+\end{document}

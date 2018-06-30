@@ -1,0 +1,35 @@
+\documentclass[12pt]{article}
+
+\usepackage[charter]{mathdesign}
+\usepackage{bm}
+\pagestyle{empty}
+
+\begin{document}
+    \begin{eqnarray*}
+        \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right] &
+        = &
+        \left[ \begin{array}{ccc}
+            \overrightarrow{u} & \overrightarrow{v} & \overrightarrow{w}
+        \end{array} \right]
+        \times
+        \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right] \\
+        & = &
+        \left[ \begin{array}{ccc}
+        \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z}
+        \end{array} \right]
+        \times
+        \textbf{P}
+        \times
+        \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right] \\
+        & = &
+        \left[ \begin{array}{ccc}
+        \overrightarrow{x} & \overrightarrow{y} & \overrightarrow{z}
+        \end{array} \right]
+        \times
+        \left(
+            \textbf{P}
+            \times
+            \left[ \begin{array}{c} u_0 \\ v_0 \\ w_0 \end{array} \right]
+        \right)
+    \end{eqnarray*}
+\end{document}
