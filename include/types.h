@@ -339,7 +339,7 @@ struct Mat {
             // find row with the max data in column r from row r to row (N - 1)
             int r_max{ r };
             for (int r_tmp = r + 1; r_tmp < N; r_tmp++)
-                if (m.data[r_tmp][r] > m.data[r_max][r])
+                if (abs(m.data[r_tmp][r]) > abs(m.data[r_max][r]))
                     r_max = r_tmp;
 
             if (r_max != r) {
@@ -354,7 +354,7 @@ struct Mat {
             }
         }
         for (int r = N - 1; r > 0; r--)
-            for (int r1 = r - 1; r >= 0; r1--) {
+            for (int r1 = r - 1; r1 >= 0; r1--) {
                 T tmp{ -m.data[r1][r] / m.data[r][r] };
                 //m.Replace(r1, r, tmp);
                 result.Replace(r1, r, tmp);
@@ -390,3 +390,11 @@ typedef Mat<unsigned, 3> uimat3;
 typedef Mat<float, 4> mat4;
 typedef Mat<int, 4> imat4;
 typedef Mat<unsigned, 4> uimat4;
+
+vec4 homo(const vec4& v) {
+    if (v[3] == 0)
+        return v;
+    else {
+        return vec4{v[0] / v[3], v[1] / v[3], v[2] / v[3], 1.0f};
+    }
+}

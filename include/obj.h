@@ -91,7 +91,19 @@ struct Obj {
                     unsigned vn_id = spans_inner[2].size() > 0 ? stoi(spans_inner[2], nullptr, 10) : 0;
 					face.emplace_back(uivec3{ v_id, vt_id, vn_id });
                 }
-                f.push_back(move(face));
+
+                if (face.size() > 3) {
+                    for (unsigned i = 1; i < face.size() - 1; i++) {
+                        vector<uivec3> sub_face;
+                        sub_face.push_back(face[0]);
+                        sub_face.push_back(face[i]);
+                        sub_face.push_back(face[i + 1]);
+                        f.push_back(move(sub_face));
+                    }
+                }
+                else {
+                    f.push_back(move(face));
+                }
             }
         }
         ifile.close();
@@ -107,7 +119,20 @@ struct Obj {
 			p[2] -= zmid;
 		}
 
+        /*
+        ** set default values for origin, axis_u, axis_v, axis_w
+        */
+        origin = vec3{ 0, 0, 0 };
+        axis_u = vec3{ 1, 0, 0 };
+        axis_v = vec3{ 0, 1, 0 };
+        axis_w = vec3{ 0, 0, 1 };
+
+        /*
+        ** clockwise should be checked screen space not here
+        */
+        /*
         MakeFaceCounterClockWise();
+        */
     }
 
     /*
